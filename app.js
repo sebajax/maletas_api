@@ -10,6 +10,7 @@ const mongoCheck = require('./middlewares/checkMongoConn');
 
 //Require App routes
 const indexRouter = require('./routes/index');
+const usuariosRouter = require('./routes/usuarios');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(mongoCheck);
 
 //Defining App routes
 app.use('/', indexRouter);
+app.use('/usuarios', usuariosRouter);
 
 //App running on port 5000
 app.set('port', process.env.PORT || 5000);

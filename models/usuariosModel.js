@@ -15,13 +15,20 @@ const usuariosSchema = new Schema({
 });
 
 const Usuarios = mongoose.model('Usuario', usuariosSchema);
+const UsuariosModel = {}
 
-const findAll = result => {
-    Usuarios.find({}, (err, docs) => {
-        result(err, docs[0]);
-    });
+UsuariosModel.findAllUsuarios = async () => {
+    return await Usuarios.find({}).exec();
+};
+
+UsuariosModel.saveUsuario = async usuario => {
+    try {
+        let newUsuario = new Usuarios(usuario);
+        await newUsuario.validate();
+        return await newUsuario.save();
+    }catch(err) {
+        return err;
+    }
 }
 
-module.exports = {
-    findAll
-};
+module.exports = UsuariosModel;
