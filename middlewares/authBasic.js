@@ -11,7 +11,7 @@ const checkUser = async (user, password) => {
         return await bcrypt.compare(password, usuario.password);
     }catch(err) {
         return err;
-    }
+    };
 };
 
 const strategy = new Strategy(
@@ -24,9 +24,9 @@ const strategy = new Strategy(
                 return done(null, user);
         }catch(err) {
             return done(err);
-        }
+        };
     }
-)
+);
 
 passport.use(strategy);
 

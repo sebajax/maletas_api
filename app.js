@@ -7,11 +7,12 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const mongoCheck = require('./middlewares/checkMongoConn');
-const auth = require('./middlewares/auth');
+const authJwt = require('./middlewares/authJwt');
 const passport = require('passport');
 
 //Require App routes
 const indexRouter = require('./routes/index');
+const loginRouter = require('./routes/login');
 const usuariosRouter = require('./routes/usuarios');
 
 const app = express();
@@ -24,11 +25,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
+
 //Check if mongo connection is up and running
 app.use(mongoCheck);
-//Check if it has the correct credentials
-app.use(auth);
 
+//If logged will return a token to use in jwt
+app.use('/login', loginRouter);
+//Middleware to Check if the token is set to use the app
+app.use(authJwt);
 //Defining App routes
 app.use('/', indexRouter);
 app.use('/usuarios', usuariosRouter);
