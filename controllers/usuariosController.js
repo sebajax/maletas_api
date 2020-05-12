@@ -2,6 +2,7 @@
 
 const Usuarios = require('../models/usuariosModel');
 const Message = require('../assets/messages');
+const bcrypt = require('bcrypt');
 
 // Adding all related functions and procesdures
 const UsuariosController = {};
@@ -86,12 +87,14 @@ UsuariosController.removeUsuario = async (req, res) => {
 };
 
 UsuariosController.saveUsuario = async (req, res) => {
-    if(!req.body.user) {
+    if(!req.body.user || !req.body.password) {
         res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
         return;
     };
 
     try{
+        req.body.password = await bcrypt.hash(req.body.password, 10);
+        
         let docs = await Usuarios.findUsuario(req.body.user);
         if(docs === null) {
             let usuario = await Usuarios.saveUsuario(req.body)
