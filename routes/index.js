@@ -5,7 +5,9 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    res.send("Hola Mundo");
+    res.status(200).json({
+        status: "API status ok"
+    });
 });
 
 module.exports = router;

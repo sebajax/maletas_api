@@ -29,12 +29,12 @@ app.use(passport.initialize());
 //Check if mongo connection is up and running
 app.use(mongoCheck);
 
+app.use('/', indexRouter);
 //If logged will return a token to use in jwt
 app.use('/login', loginRouter);
 //Middleware to Check if the token is set to use the app
 app.use(authJwt);
 //Defining App routes
-app.use('/', indexRouter);
 app.use('/usuarios', usuariosRouter);
 
 //App running on port 5000
