@@ -9,6 +9,7 @@ const cors = require('cors');
 const mongoCheck = require('./middlewares/checkMongoConn');
 const authJwt = require('./middlewares/authJwt');
 const passport = require('passport');
+require('dotenv').config();
 
 //Require App routes
 const indexRouter = require('./routes/index');
@@ -38,9 +39,7 @@ app.use(authJwt);
 app.use('/usuarios', usuariosRouter);
 
 //App running on port 5000
-app.set('port', process.env.PORT || 5000);
-
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
     console.log("Maletas API running on port 5000");
 });
 

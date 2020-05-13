@@ -4,10 +4,10 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/authBasic');
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt.config');
+require('dotenv').config();
 
 router.get('/', auth, (req, res) => {
-    const token = jwt.sign({id: req.user}, jwtConfig.secret);
+    const token = jwt.sign({id: req.user}, process.env.JWT_SECRET);
     res.status(200).send({
         auth: true,
         token,

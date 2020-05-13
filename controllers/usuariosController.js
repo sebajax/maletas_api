@@ -3,8 +3,8 @@
 const Usuarios = require('../models/usuariosModel');
 const Message = require('../assets/messages');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-const BCRYPT_SALT_ROUNDS = 10;
 // Adding all related functions and procesdures
 const UsuariosController = {};
 
@@ -94,7 +94,7 @@ UsuariosController.saveUsuario = async (req, res) => {
     };
 
     try{
-        req.body.password = await bcrypt.hash(req.body.password, BCRYPT_SALT_ROUNDS);
+        req.body.password = await bcrypt.hash(req.body.password, process.env.BCRYPT_SALT_ROUNDS);
         
         let docs = await Usuarios.findUsuario(req.body.user);
         if(docs === null) {
