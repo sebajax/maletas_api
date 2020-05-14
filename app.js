@@ -15,6 +15,7 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const usuariosRouter = require('./routes/usuarios');
+const ingresosSimuladoRouter = require('./routes/ingresosSimulado');
 
 const app = express();
 
@@ -30,13 +31,23 @@ app.use(passport.initialize());
 //Check if mongo connection is up and running
 app.use(mongoCheck);
 
+/*
+* START DEFINING API ROUTES
+*/
+//Route to check the status of the API
 app.use('/', indexRouter);
-//If logged will return a token to use in jwt
+
+//If logged will return a jwt token to use in the rest of the API
 app.use('/login', loginRouter);
+
 //Middleware to Check if the token is set to use the app
 app.use(authJwt);
-//Defining App routes
+//Defining App routes GLOBAL that require JWT auth
 app.use('/usuarios', usuariosRouter);
+app.use('/ingresosSimulado', ingresosSimuladoRouter);
+/*
+* END DEFINING API ROUTES
+*/
 
 //App running on port 5000
 app.listen(process.env.PORT, () => {
