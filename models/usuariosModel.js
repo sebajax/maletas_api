@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { Permissions } = require('./permissionsModel');
 
 const usuariosSchema = new Schema({
     user: {
@@ -18,7 +19,7 @@ const usuariosSchema = new Schema({
         required: [true, 'Debe ingresar nombre'],
     },
     config: {
-        permType: {
+        permId: {
             type: Schema.Types.ObjectId,
             ref: 'Permissions',
             required: [true, 'Debe seleccionar tipo de permiso'],
@@ -27,10 +28,6 @@ const usuariosSchema = new Schema({
             type: Boolean,
             default: false
         }
-    },
-    lastLogin: {
-        type: Date, 
-        default: Date.now
     }
 });
 
@@ -46,7 +43,10 @@ UsuariosModel.findAllUsuarios = async () => {
 };
 
 UsuariosModel.findUsuario = async user => {
-    return await Usuarios.findOne({user}).exec();
+    return Usuarios.findOne({user}).populate({
+            path: 'config.permId',
+            model: Permissions
+    }).exec();
 };
 
 UsuariosModel.updateUsuario = async (id, user) => {

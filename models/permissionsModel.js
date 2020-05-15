@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const permissionSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     permType: {
         type: String,
         required: [true, 'Debe ingresar tipo de permiso'],
@@ -27,4 +28,7 @@ PermissionsModel.savePermission = async (permission) => {
     return await newPermission.save();
 };
 
-module.exports = PermissionsModel;
+module.exports = {
+    PermissionsModel,
+    Permissions
+}

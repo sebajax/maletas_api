@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // Adding all related functions and procesdures
 const UsuariosController = {};
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS);
 
 UsuariosController.getAllUsuarios = async (req, res) => {
     try {
@@ -46,7 +47,33 @@ UsuariosController.updateUsuario = async (req, res) => {
     try {
         let usuario = await Usuarios.findUsuarioId(req.params.id);
         if(usuario) {
-            let updatedUsuario = await Usuarios.updateUsuario(req.params.id, req.body);
+            let updatedUsuario = await Usuarios.updateUsuario(req.params.id, req.body.data);
+            if(updatedUsuario)
+                res.status(200).json({message: `${usuario.user} modificado con exito`});
+            else
+                res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+                return;                 
+        }else {
+            res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+            return;            
+        };
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;         
+    };
+};
+
+UsuariosController.updateTheme = async (req, res) => {
+    if(!req.params.id) {
+        res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+        return;
+    };
+
+    try {
+        let usuario = await Usuarios.findUsuarioId(req.params.id);
+        if(usuario) {
+            usuario.config.appTheme = req.body.data.appTheme;
+            let updatedUsuario = await Usuarios.updateUsuario(req.params.id, usuario);
             if(updatedUsuario)
                 res.status(200).json({message: `${usuario.user} modificado con exito`});
             else
@@ -94,7 +121,7 @@ UsuariosController.saveUsuario = async (req, res) => {
     };
 
     try{
-        req.body.password = await bcrypt.hash(req.body.password, process.env.BCRYPT_SALT_ROUNDS);
+        req.body.password = await bcrypt.hash(req.body.password, SALT_ROUNDS);
         
         let docs = await Usuarios.findUsuario(req.body.user);
         if(docs === null) {

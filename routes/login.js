@@ -3,16 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/authBasic');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const authJwt = require('../middlewares/authJwt');
+const loginController = require('../controllers/loginController');
 
-router.get('/', auth, (req, res) => {
-    const token = jwt.sign({id: req.user}, process.env.JWT_SECRET, {expiresIn: '10h'});
-    res.status(200).send({
-        auth: true,
-        token,
-        message: 'Usuario valido'
-    });
-});
+router.get('/', auth, loginController.login);
+
+router.get('/checkToken', authJwt, loginController.checkToken);
 
 module.exports = router;
