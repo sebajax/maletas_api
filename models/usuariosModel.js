@@ -39,7 +39,10 @@ UsuariosModel.findUsuarioId = async id => {
 }
 
 UsuariosModel.findAllUsuarios = async () => {
-    return await Usuarios.find({}).exec();
+    return await Usuarios.find({}).populate({
+        path: 'config.permId',
+        model: Permissions        
+    }).exec();
 };
 
 UsuariosModel.findUsuario = async user => {
