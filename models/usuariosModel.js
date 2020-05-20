@@ -35,11 +35,14 @@ const Usuarios = mongoose.model('Usuario', usuariosSchema);
 const UsuariosModel = {};
 
 UsuariosModel.findUsuarioId = async id => {
-    return await Usuarios.findById(id).exec();
+    return await Usuarios.findById(id).populate({
+        path: 'config.permId',
+        model: Permissions
+    }).exec();
 }
 
-UsuariosModel.findAllUsuarios = async () => {
-    return await Usuarios.find({}).populate({
+UsuariosModel.findAllUsuarios = async data => {
+    return await Usuarios.find(data).populate({
         path: 'config.permId',
         model: Permissions        
     }).exec();

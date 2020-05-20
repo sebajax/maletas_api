@@ -11,7 +11,7 @@ const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS);
 
 UsuariosController.getAllUsuarios = async (req, res) => {
     try {
-        let docs = await Usuarios.findAllUsuarios();
+        let docs = await Usuarios.findAllUsuarios(req.body.data);
         res.status(200).json(docs);
     }catch(err) {
         res.status(500).json(Message.handleErrorMessage(err));
@@ -27,6 +27,25 @@ UsuariosController.getUsuario = async (req, res) => {
 
     try {
         let docs = await Usuarios.findUsuario(req.params.user);
+        if(docs !== null)
+            res.status(200).json(docs);
+        else 
+            res.status(404).json(Message.handleErrorMessage(Message.type.ERROR_404));
+            return;
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;
+    };
+};
+
+UsuariosController.getUsuarioId = async (req, res) => {
+    if(!req.params.id) {
+        res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+        return;
+    };
+
+    try {
+        let docs = await Usuarios.findUsuarioId(req.params.id);
         if(docs !== null)
             res.status(200).json(docs);
         else 

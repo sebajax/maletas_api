@@ -5,10 +5,13 @@ const router = express.Router();
 const usuariosController = require('../controllers/usuariosController');
 
 /* GET all Usuarios. */
-router.get('/getAllUsuarios', usuariosController.getAllUsuarios);
+router.post('/getAllUsuarios', usuariosController.getAllUsuarios);
 
 /* GET usuario by user. */
 router.get('/getUsuario/:user', usuariosController.getUsuario);
+
+/* GET usuario by _id user. */
+router.get('/getUsuarioId/:id', usuariosController.getUsuarioId);
 
 /* POST save Usuario. */
 router.post('/saveUsuario', usuariosController.saveUsuario);
