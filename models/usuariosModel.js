@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 const { Permissions } = require('./permissionsModel');
 
@@ -31,6 +32,7 @@ const usuariosSchema = new Schema({
     }
 });
 
+usuariosSchema.plugin(mongoosePaginate);
 const Usuarios = mongoose.model('Usuario', usuariosSchema);
 const UsuariosModel = {};
 
@@ -41,11 +43,14 @@ UsuariosModel.findUsuarioId = async id => {
     }).exec();
 }
 
-UsuariosModel.findAllUsuarios = async data => {
-    return await Usuarios.find(data).populate({
-        path: 'config.permId',
-        model: Permissions        
-    }).exec();
+UsuariosModel.findAllUsuarios = async (page, query) => {
+    let options = {
+        page,
+        sort: { user: 1 },
+        populate: "config.permId",
+        limit: 30
+    };
+    return await Usuarios.paginate(query, options);
 };
 
 UsuariosModel.findUsuario = async user => {

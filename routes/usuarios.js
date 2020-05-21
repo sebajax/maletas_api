@@ -5,7 +5,7 @@ const router = express.Router();
 const usuariosController = require('../controllers/usuariosController');
 
 /* GET all Usuarios. */
-router.post('/getAllUsuarios', usuariosController.getAllUsuarios);
+router.get('/getAllUsuarios/:page', usuariosController.getAllUsuarios);
 
 /* GET usuario by user. */
 router.get('/getUsuario/:user', usuariosController.getUsuario);
