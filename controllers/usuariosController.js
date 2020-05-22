@@ -3,6 +3,7 @@
 const Usuarios = require('../models/usuariosModel');
 const Message = require('../assets/messages');
 const bcrypt = require('bcrypt');
+const validate = require('validate.js');
 require('dotenv').config();
 
 // Adding all related functions and procesdures
@@ -10,8 +11,23 @@ const UsuariosController = {};
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS);
 
 UsuariosController.getAllUsuarios = async (req, res) => {
+    let query = {};
+    //Solo puede recibir (user, config.permId)
+    if(validate.isDefined(req.query.q)) {
+        try {
+            let auxQuery = JSON.parse(req.query.q);
+            if(validate.isDefined(auxQuery.name))
+                Object.assign(query, { 'name' : { $regex: '.*' + auxQuery.name + '.*' } });
+            if(validate.isDefined(auxQuery.permId)) 
+                Object.assign(query, { 'config.permId' : auxQuery.permId });
+        }catch(err) {
+            res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+            return;           
+        }
+    }
+    
     try {
-        let docs = await Usuarios.findAllUsuarios(req.params.page, JSON.parse(req.query.q));
+        let docs = await Usuarios.findAllUsuarios(req.params.page, query);
         res.status(200).json(docs);
     }catch(err) {
         res.status(500).json(Message.handleErrorMessage(err));
