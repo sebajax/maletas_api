@@ -15,15 +15,23 @@ const permissionSchema = new Schema({
 const Permissions = mongoose.model('Permissions', permissionSchema);
 const PermissionsModel = {};
 
-PermissionsModel.findAllPermissions = async () => {
-    return await Permissions.find({}).exec();
+PermissionsModel.findAllPermissions = async query => {
+    return await Permissions.find(query).exec();
 };
 
-PermissionsModel.findPermission = async (permType) => {
+PermissionsModel.findPermission = async permType => {
     return await Permissions.findOne(permType).exec();
 };
 
-PermissionsModel.savePermission = async (permission) => {
+PermissionsModel.findPermissionById = async id => {
+    return await Permissions.findById(id).exec();
+};
+
+PermissionsModel.updatePermiso = async (id, permiso) => {
+    return await Permissions.findByIdAndUpdate(id, permiso).exec();
+};
+
+PermissionsModel.savePermission = async permission => {
     let newPermission = new Permissions(permission);
     return await newPermission.save();
 };
