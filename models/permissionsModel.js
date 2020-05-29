@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const permissionSchema = new Schema({
-    _id: Schema.Types.ObjectId,
     permType: {
         type: String,
         required: [true, 'Debe ingresar tipo de permiso'],
@@ -19,7 +18,7 @@ PermissionsModel.findAllPermissions = async query => {
     return await Permissions.find(query).exec();
 };
 
-PermissionsModel.findPermission = async permType => {
+PermissionsModel.findPermiso = async permType => {
     return await Permissions.findOne(permType).exec();
 };
 
@@ -31,10 +30,14 @@ PermissionsModel.updatePermiso = async (id, permiso) => {
     return await Permissions.findByIdAndUpdate(id, permiso).exec();
 };
 
-PermissionsModel.savePermission = async permission => {
-    let newPermission = new Permissions(permission);
-    return await newPermission.save();
+PermissionsModel.savePermiso = async permiso => {
+    let newPermiso = new Permissions(permiso);
+    return await newPermiso.save();
 };
+
+PermissionsModel.removePermiso = async id => {
+    return await Permissions.findByIdAndRemove(id).exec();
+}
 
 module.exports = {
     PermissionsModel,

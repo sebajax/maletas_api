@@ -79,4 +79,55 @@ PermisosController.updatePermiso = async (req, res) => {
     };    
 };
 
+PermisosController.removePermiso = async (req, res) => {
+    if(!req.params.id) {
+        res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+        return;
+    };
+
+    try {
+        let permiso = await PermissionsModel.findPermissionById(req.params.id);
+        if(permiso) {
+            if(permiso.permType !== "admin") {
+                let removedPermiso = await PermissionsModel.removePermiso(req.params.id);
+                if(removedPermiso)
+                    res.status(200).json({message: `${permiso.permType} eliminado con exito`});
+                else
+                    res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+                    return;    
+            }else {
+                res.status(400).json({message: `${permiso.permType} esta prohibido eliminar`});
+                return;
+            }             
+        }else {
+            res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+            return;            
+        };
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;         
+    };
+};
+
+PermisosController.savePermiso = async (req, res) => {
+    if(!req.body.permType) {
+        res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400));
+        return;
+    };
+
+    try{
+        let docs = await PermissionsModel.findPermiso(req.body);
+        if(docs === null) {
+            let permiso = await PermissionsModel.savePermiso(req.body)
+            res.status(200).json(permiso);
+        }else {
+            res.status(400).json(Message.handleErrorMessage(Message.type.ERROR_400_KEY));
+            return;
+        };
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;  
+    };
+};
+
 module.exports = PermisosController;
