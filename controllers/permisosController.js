@@ -59,7 +59,7 @@ PermisosController.updatePermiso = async (req, res) => {
         let permiso = await PermissionsModel.findPermissionById(req.params.id);
         if(permiso) {
             if(permiso.permType !== "admin") {
-                let updatedPermiso = await PermissionsModel.updatePermiso(req.params.id, req.body.data);
+                let updatedPermiso = await PermissionsModel.updatePermiso(req.params.id, req.body);
                 if(updatedPermiso)
                     res.status(200).json({message: `Permiso tipo (${permiso.permType}) modificado con exito`});
                 else
