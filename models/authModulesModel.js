@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { Permissions } = require('./permissionsModel');
 
 const authModulesSchema = new Schema({
     module: {
@@ -21,19 +20,23 @@ const AuthModulesModel = {};
 AuthModulesModel.findAuthModules = async () => {
     return await AuthModules.find({}).populate({
         path: 'permId',
-        model: Permissions
+        model: "Permissions"
     }).exec();
 }
 
 AuthModulesModel.findAuthPermType = async module => {
     return await AuthModules.findOne(module).populate({
         path: 'permId',
-        model: Permissions
+        model: "Permissions"
     }).exec();
 };
 
 AuthModulesModel.updateAuthPerm = async (id, authPerm) => {
     return await AuthModules.findByIdAndUpdate(id, authPerm).exec();
+};
+
+AuthModulesModel.removePermId = async permId => {
+    return await AuthModules.update({"permId": permId}, {"$pull": {"permId": permId}}, {multi: true}).exec();
 };
 
 AuthModulesModel.saveAuthPerm = async authPerm => {

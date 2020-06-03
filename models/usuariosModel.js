@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
-const { Permissions } = require('./permissionsModel');
 
 const usuariosSchema = new Schema({
     user: {
@@ -39,7 +38,7 @@ const UsuariosModel = {};
 UsuariosModel.findUsuarioId = async id => {
     return await Usuarios.findById(id).populate({
         path: 'config.permId',
-        model: Permissions
+        model: "Permissions"
     }).exec();
 };
 
@@ -56,7 +55,7 @@ UsuariosModel.findAllUsuarios = async (page, query) => {
 UsuariosModel.findUsuario = async user => {
     return Usuarios.findOne({user}).populate({
             path: 'config.permId',
-            model: Permissions
+            model: "Permissions"
     }).exec();
 };
 
@@ -66,6 +65,10 @@ UsuariosModel.updateUsuario = async (id, user) => {
 
 UsuariosModel.removeUsuario = async id => {
     return await Usuarios.findByIdAndRemove(id).exec();
+};
+
+UsuariosModel.removeUserPermId = async permId => {
+    return await Usuarios.update({"config.permId": permId}, {"$set": {"config.permId": null}}, {multi: true}).exec();
 };
 
 UsuariosModel.saveUsuario = async user => {

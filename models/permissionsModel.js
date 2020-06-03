@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const AuthModulesModel = require('./authModulesModel');
+const Usuarios = require('./usuariosModel');
 
 const permissionSchema = new Schema({
     permType: {
@@ -36,7 +38,13 @@ PermissionsModel.savePermiso = async permiso => {
 };
 
 PermissionsModel.removePermiso = async id => {
-    return await Permissions.findByIdAndRemove(id).exec();
+    try {
+        await Usuarios.removeUserPermId(id);
+        await AuthModulesModel.removePermId(id);
+        return await Permissions.findByIdAndRemove(id).exec();
+    }catch(err) {
+        return;
+    }
 }
 
 module.exports = {
