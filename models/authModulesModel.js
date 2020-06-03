@@ -1,0 +1,44 @@
+'use strict';
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const { Permissions } = require('./permissionsModel');
+
+const authModulesSchema = new Schema({
+    module: {
+        type: String,
+        unique: true
+    },
+    permId: [{
+        type: Schema.Types.ObjectId,    
+        ref: 'Permissions'
+    }],
+});
+
+const AuthModules = mongoose.model('AuthModules', authModulesSchema);
+const AuthModulesModel = {};
+
+AuthModulesModel.findAuthModules = async () => {
+    return await AuthModules.find({}).populate({
+        path: 'permId',
+        model: Permissions
+    }).exec();
+}
+
+AuthModulesModel.findAuthPermType = async module => {
+    return await AuthModules.findOne(module).populate({
+        path: 'permId',
+        model: Permissions
+    }).exec();
+};
+
+AuthModulesModel.updateAuthPerm = async (id, authPerm) => {
+    return await AuthModules.findByIdAndUpdate(id, authPerm).exec();
+};
+
+AuthModulesModel.saveAuthPerm = async authPerm => {
+    let newAuthPerm = new AuthModules(authPerm);
+    return await newAuthPerm.save();
+};
+
+module.exports = AuthModulesModel;

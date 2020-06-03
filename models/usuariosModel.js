@@ -41,7 +41,7 @@ UsuariosModel.findUsuarioId = async id => {
         path: 'config.permId',
         model: Permissions
     }).exec();
-}
+};
 
 UsuariosModel.findAllUsuarios = async (page, query) => {
     let options = {
@@ -62,11 +62,11 @@ UsuariosModel.findUsuario = async user => {
 
 UsuariosModel.updateUsuario = async (id, user) => {
     return await Usuarios.findByIdAndUpdate(id, user).exec();
-}
+};
 
 UsuariosModel.removeUsuario = async id => {
     return await Usuarios.findByIdAndRemove(id).exec();
-}
+};
 
 UsuariosModel.saveUsuario = async user => {
     let newUser = new Usuarios(user);

@@ -16,6 +16,7 @@ const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const usuariosRouter = require('./routes/usuarios');
 const permisosRouter = require('./routes/permisos');
+const authModules = require('./routes/authModules');
 const ingresosSimuladoRouter = require('./routes/ingresosSimulado');
 
 const app = express();
@@ -46,6 +47,7 @@ app.use(authJwt);
 //Defining App routes GLOBAL that require JWT auth
 app.use('/usuarios', usuariosRouter);
 app.use('/permisos', permisosRouter);
+app.use('/authModules', authModules);
 app.use('/ingresosSimulado', ingresosSimuladoRouter);
 /*
 * END DEFINING API ROUTES
