@@ -13,4 +13,7 @@ router.get('/getAuthModule/:module', authModulesController.getAuthModule);
 /* POST save AuthModules. */
 router.post('/saveAuthModule/:module', authModulesController.saveAuthModule);
 
+/* GET isAuth */
+router.get('/isAuth/:permId/:module', authModulesController.isAuth);
+
 module.exports = router;

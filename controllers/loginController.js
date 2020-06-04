@@ -17,6 +17,7 @@ LoginController.login = async (req, res) => {
                 token: token,
                 userId: docs._id,
                 user: docs.user,
+                permId: docs.config.permId._id,
                 permType: docs.config.permId.permType,
                 appTheme: docs.config.appTheme,
                 message: 'Usuario valido'

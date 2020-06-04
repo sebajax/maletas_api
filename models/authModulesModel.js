@@ -17,6 +17,10 @@ const authModulesSchema = new Schema({
 const AuthModules = mongoose.model('AuthModules', authModulesSchema);
 const AuthModulesModel = {};
 
+AuthModulesModel.isAuth = async (permId, module) => {
+    return await AuthModules.find({module, permId}).exec();
+}
+
 AuthModulesModel.findAuthModules = async () => {
     return await AuthModules.find({}).populate({
         path: 'permId',

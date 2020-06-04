@@ -8,6 +8,37 @@ const Validate = require('validate.js');
 // Adding all related functions and procesdures
 const AuthModulesController = {};
 
+AuthModulesController.isAuth = async (req, res) => {
+    if(!Validate.isDefined(req.params.permId) || !Validate.isDefined(req.params.module)) {
+        res.status(200).json(false);
+        return;
+    }
+    if(Validate.isEmpty(req.params.permId) || Validate.isEmpty(req.params.module)) {
+        res.status(200).json(false);
+        return;
+    }
+
+    try {
+        let hasPerm = await PermissionsModel.findPermissionById(req.params.permId);
+        if(hasPerm) {
+            let doc = await AuthModulesModel.isAuth(req.params.permId, req.params.module);
+            if(!Validate.isEmpty(doc) && Validate.isArray(doc)) {
+                res.status(200).json(true);
+                return;
+            }else {
+                res.status(200).json(false);
+                return;
+            }
+        }else {
+            res.status(200).json(false);
+            return;            
+        }
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;  
+    }
+};
+
 AuthModulesController.getAuthModules = async (req, res) => {
     try {
         let docs = await AuthModulesModel.findAuthModules();
