@@ -39,6 +39,36 @@ AuthModulesController.isAuth = async (req, res) => {
     }
 };
 
+AuthModulesController.getModulesAccess = async (req, res) => {
+    let moduleAccess = [];
+
+    if(!Validate.isDefined(req.params.permId) || Validate.isEmpty(req.params.permId)) {
+        res.status(500).json(moduleAccess);
+        return;
+    }
+
+    try {
+        let hasPerm = await PermissionsModel.findPermissionById(req.params.permId);
+        if(hasPerm) {
+            let doc = await AuthModulesModel.getModulesAccess(req.params.permId);
+            if(!Validate.isEmpty(doc) && Validate.isArray(doc)) {
+                moduleAccess = doc.map(obj => (obj.module));
+                res.status(200).json(moduleAccess);
+                return;
+            }else {
+                res.status(200).json(moduleAccess);
+                return;
+            }
+        }else {
+            res.status(200).json(moduleAccess);
+            return;            
+        }
+    }catch(err) {
+        res.status(500).json(Message.handleErrorMessage(err));
+        return;  
+    }
+};
+
 AuthModulesController.getAuthModules = async (req, res) => {
     try {
         let docs = await AuthModulesModel.findAuthModules();

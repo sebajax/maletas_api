@@ -21,6 +21,10 @@ AuthModulesModel.isAuth = async (permId, module) => {
     return await AuthModules.find({module, permId}).exec();
 }
 
+AuthModulesModel.getModulesAccess = async permId => {
+    return await AuthModules.find({permId}).exec();
+}
+
 AuthModulesModel.findAuthModules = async () => {
     return await AuthModules.find({}).populate({
         path: 'permId',
