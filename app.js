@@ -18,6 +18,8 @@ const usuariosRouter = require('./routes/usuarios');
 const permisosRouter = require('./routes/permisos');
 const authModules = require('./routes/authModules');
 const ingresosSimuladoRouter = require('./routes/ingresosSimulado');
+const ingresosRouter = require('./routes/ingresos');
+const gastosRouter = require('./routes/gastos');
 
 const app = express();
 
@@ -49,6 +51,8 @@ app.use('/usuarios', usuariosRouter);
 app.use('/permisos', permisosRouter);
 app.use('/authModules', authModules);
 app.use('/ingresosSimulado', ingresosSimuladoRouter);
+app.use('/ingresos', ingresosRouter);
+app.use('/gastos', gastosRouter);
 /*
 * END DEFINING API ROUTES
 */
